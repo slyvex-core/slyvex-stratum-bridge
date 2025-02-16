@@ -1,4 +1,4 @@
-package kaspastratum
+package slyvexstratum
 
 import (
 	"context"
@@ -9,18 +9,18 @@ import (
 	"time"
 
 	"github.com/mattn/go-colorable"
-	"github.com/onemorebsmith/kaspastratum/src/gostratum"
-	"github.com/onemorebsmith/kaspastratum/src/utils"
+	"github.com/onemorebsmith/slyvexstratum/src/gostratum"
+	"github.com/onemorebsmith/slyvexstratum/src/utils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-const version = "v1.2.2"
+const version = "v1.1.1"
 const minBlockWaitTime = 3 * time.Second
 
 type BridgeConfig struct {
 	StratumPort     string        `yaml:"stratum_port"`
-	RPCServer       string        `yaml:"kaspad_address"`
+	RPCServer       string        `yaml:"slyvexd_address"`
 	PromPort        string        `yaml:"prom_port"`
 	PrintStats      bool          `yaml:"print_stats"`
 	UseLogFile      bool          `yaml:"log_to_file"`
@@ -72,7 +72,7 @@ func ListenAndServe(cfg BridgeConfig) error {
 	if blockWaitTime == 0 {
 		blockWaitTime = minBlockWaitTime
 	}
-	ksApi, err := NewKaspaAPI(cfg.RPCServer, blockWaitTime, logger)
+	ksApi, err := NewSlyvexAPI(cfg.RPCServer, blockWaitTime, logger)
 	if err != nil {
 		return err
 	}
@@ -85,7 +85,7 @@ func ListenAndServe(cfg BridgeConfig) error {
 		go http.ListenAndServe(cfg.HealthCheckPort, nil)
 	}
 
-	shareHandler := newShareHandler(ksApi.kaspad)
+	shareHandler := newShareHandler(ksApi.slyvexd)
 	minDiff := float64(cfg.MinShareDiff)
 	if minDiff == 0 {
 		minDiff = 4

@@ -1,12 +1,12 @@
-package kaspastratum
+package slyvexstratum
 
 import (
 	"math/big"
 	"sync"
 	"time"
 
-	"github.com/kaspanet/kaspad/app/appmessage"
-	"github.com/onemorebsmith/kaspastratum/src/gostratum"
+	"github.com/slyvex-core/slyvexd/app/appmessage"
+	"github.com/onemorebsmith/slyvexstratum/src/gostratum"
 )
 
 const maxjobs = 32
@@ -19,7 +19,7 @@ type MiningState struct {
 	initialized bool
 	useBigJob   bool
 	connectTime time.Time
-	stratumDiff *kaspaDiff
+	stratumDiff *slyvexDiff
 	maxJobs     uint8
 }
 

@@ -1,4 +1,4 @@
-package kaspastratum
+package slyvexstratum
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/onemorebsmith/kaspastratum/src/gostratum"
+	"github.com/onemorebsmith/slyvexstratum/src/gostratum"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
@@ -83,7 +83,7 @@ func (c *clientListener) OnDisconnect(ctx *gostratum.StratumContext) {
 	RecordDisconnect(ctx)
 }
 
-func (c *clientListener) NewBlockAvailable(kapi *KaspaApi) {
+func (c *clientListener) NewBlockAvailable(kapi *SlyvexApi) {
 	c.clientLock.Lock()
 	addresses := make([]string, 0, len(c.clients))
 	for _, cl := range c.clients {
@@ -105,11 +105,11 @@ func (c *clientListener) NewBlockAvailable(kapi *KaspaApi) {
 			if err != nil {
 				if strings.Contains(err.Error(), "Could not decode address") {
 					RecordWorkerError(client.WalletAddr, ErrInvalidAddressFmt)
-					client.Logger.Error(fmt.Sprintf("failed fetching new block template from kaspa, malformed address: %s", err))
+					client.Logger.Error(fmt.Sprintf("failed fetching new block template from slyvex, malformed address: %s", err))
 					client.Disconnect() // unrecoverable
 				} else {
 					RecordWorkerError(client.WalletAddr, ErrFailedBlockFetch)
-					client.Logger.Error(fmt.Sprintf("failed fetching new block template from kaspa: %s", err))
+					client.Logger.Error(fmt.Sprintf("failed fetching new block template from slyvex: %s", err))
 				}
 				return
 			}
@@ -126,7 +126,7 @@ func (c *clientListener) NewBlockAvailable(kapi *KaspaApi) {
 				state.initialized = true
 				state.useBigJob = bigJobRegex.MatchString(client.RemoteApp)
 				// first pass through send config/default difficulty
-				state.stratumDiff = newKaspaDiff()
+				state.stratumDiff = newSlyvexDiff()
 				state.stratumDiff.setDiffValue(c.minShareDiff)
 				sendClientDiff(client, state)
 				c.shareHandler.setClientVardiff(client, c.minShareDiff)
@@ -177,9 +177,9 @@ func (c *clientListener) NewBlockAvailable(kapi *KaspaApi) {
 		c.lastBalanceCheck = time.Now()
 		if len(addresses) > 0 {
 			go func() {
-				balances, err := kapi.kaspad.GetBalancesByAddresses(addresses)
+				balances, err := kapi.slyvexd.GetBalancesByAddresses(addresses)
 				if err != nil {
-					c.logger.Warn("failed to get balances from kaspa, prom stats will be out of date", zap.Error(err))
+					c.logger.Warn("failed to get balances from slyvex, prom stats will be out of date", zap.Error(err))
 					return
 				}
 				RecordBalances(balances)

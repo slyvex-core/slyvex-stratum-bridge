@@ -1,12 +1,12 @@
-package kaspastratum
+package slyvexstratum
 
 import (
 	"fmt"
 	"net/http"
 	"sync"
 
-	"github.com/kaspanet/kaspad/app/appmessage"
-	"github.com/onemorebsmith/kaspastratum/src/gostratum"
+	"github.com/slyvex-core/slyvexd/app/appmessage"
+	"github.com/onemorebsmith/slyvexstratum/src/gostratum"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"

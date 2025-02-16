@@ -1,9 +1,9 @@
 volumes:
   prometheus_data: {}
 services:
-  ks_bridge:
-    image: onemorebsmith/kaspa_bridge:latest
-    container_name: ks_bridge
+  svx_bridge:
+    image: onemorebsmith/slyvex_bridge:latest
+    container_name: svx_bridge
     restart: unless-stopped
     user: "0"
     command:
@@ -11,7 +11,7 @@ services:
       - '-stats=false'
       - '-stratum=:5555'
       - '-prom=:2114'
-      - '-kaspa=host.docker.internal:16110'
+      - '-slyvex=host.docker.internal:28110'
       - '-mindiff=64'
       - '-vardiff=true'
     ports:

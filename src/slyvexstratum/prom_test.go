@@ -1,10 +1,10 @@
-package kaspastratum
+package slyvexstratum
 
 import (
 	"testing"
 
-	"github.com/kaspanet/kaspad/app/appmessage"
-	"github.com/onemorebsmith/kaspastratum/src/gostratum"
+	"github.com/slyvex-core/slyvexd/app/appmessage"
+	"github.com/onemorebsmith/slyvexstratum/src/gostratum"
 )
 
 func TestPromValid(t *testing.T) {

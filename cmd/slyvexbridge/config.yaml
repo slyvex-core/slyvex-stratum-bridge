@@ -3,11 +3,11 @@
 # Note `:PORT` format is needed if not specifiying a specific ip range 
 stratum_port: :5555
 
-# kaspad_address: address/port of the rpc server for kaspad, typically 16110
+# slyvexd_address: address/port of the rpc server for slyvexd, typically 28110
 # For a list of public nodes, run `nslookup mainnet-dnsseed.daglabs-dev.com` 
 # uncomment for to use a public node
-# kaspad_address: 46.17.104.200:16110
-kaspad_address: localhost:16110
+# slyvexd_address: 46.17.104.200:28110
+slyvexd_address: localhost:28110
 
 # min_share_diff: only accept shares of the specified difficulty (or higher) 
 # from the miner(s).  Higher values will reduce the number of shares submitted, 
@@ -56,7 +56,7 @@ shares_per_min: 20
 # var_diff_stats: if true, print vardiff engine stats to the log every 10s 
 var_diff_stats: false
 
-# block_wait_time: time to wait since last new block message from kaspad before
+# block_wait_time: time to wait since last new block message from slyvexd before
 # manually requesting a new block.  Examples are '500ms', '3s', '1m', etc.
 block_wait_time: 3s
 

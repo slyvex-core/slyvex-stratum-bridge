@@ -1,4 +1,4 @@
-package kaspastratum
+package slyvexstratum
 
 import (
 	"fmt"
@@ -11,13 +11,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kaspanet/kaspad/app/appmessage"
-	"github.com/kaspanet/kaspad/domain/consensus/model/externalapi"
-	"github.com/kaspanet/kaspad/domain/consensus/utils/consensushashing"
-	"github.com/kaspanet/kaspad/domain/consensus/utils/pow"
-	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
-	"github.com/onemorebsmith/kaspastratum/src/gostratum"
-	"github.com/onemorebsmith/kaspastratum/src/utils"
+	"github.com/slyvex-core/slyvexd/app/appmessage"
+	"github.com/slyvex-core/slyvexd/domain/consensus/model/externalapi"
+	"github.com/slyvex-core/slyvexd/domain/consensus/utils/consensushashing"
+	"github.com/slyvex-core/slyvexd/domain/consensus/utils/pow"
+	"github.com/slyvex-core/slyvexd/infrastructure/network/rpcclient"
+	"github.com/onemorebsmith/slyvexstratum/src/gostratum"
+	"github.com/onemorebsmith/slyvexstratum/src/utils"
 	"github.com/pkg/errors"
 	"go.uber.org/atomic"
 	"go.uber.org/zap"
@@ -41,16 +41,16 @@ type WorkStats struct {
 }
 
 type shareHandler struct {
-	kaspa        *rpcclient.RPCClient
+	slyvex        *rpcclient.RPCClient
 	stats        map[string]*WorkStats
 	statsLock    sync.Mutex
 	overall      WorkStats
 	tipBlueScore uint64
 }
 
-func newShareHandler(kaspa *rpcclient.RPCClient) *shareHandler {
+func newShareHandler(slyvex *rpcclient.RPCClient) *shareHandler {
 	return &shareHandler{
-		kaspa:     kaspa,
+		slyvex:     slyvex,
 		stats:     map[string]*WorkStats{},
 		statsLock: sync.Mutex{},
 	}
@@ -284,7 +284,7 @@ func (sh *shareHandler) submit(ctx *gostratum.StratumContext,
 		Header:       mutable.ToImmutable(),
 		Transactions: block.Transactions,
 	}
-	_, err := sh.kaspa.SubmitBlock(block)
+	_, err := sh.slyvex.SubmitBlock(block)
 	blockhash := consensushashing.BlockHash(block)
 	// print after the submit to get it submitted faster
 	ctx.Logger.Info(fmt.Sprintf("Submitted block %s", blockhash))
@@ -350,7 +350,7 @@ func (sh *shareHandler) startStatsThread() error {
 		str += "\n-------------------------------------------------------------------------------\n"
 		str += fmt.Sprintf("                | %14.14s | %14.14s | %12d | %11s",
 			rateStr, ratioStr, sh.overall.BlocksFound.Load(), time.Since(start).Round(time.Second))
-		str += "\n========================================================== ks_bridge_" + version + " ===\n"
+		str += "\n========================================================== svx_bridge_" + version + " ===\n"
 		// sh.statsLock.Unlock()
 		log.Println(str)
 	}
@@ -477,7 +477,7 @@ func (sh *shareHandler) startVardiffThread(expectedShareRate uint, logStats bool
 		}
 		sort.Strings(statsLines)
 		stats += strings.Join(statsLines, "\n")
-		stats += "\n\n========================================================== ks_bridge_" + version + " ===\n"
+		stats += "\n\n========================================================== svx_bridge_" + version + " ===\n"
 		stats += "\n" + strings.Join(toleranceErrs, "\n") + "\n\n"
 		if logStats {
 			bws.Write([]byte(stats))

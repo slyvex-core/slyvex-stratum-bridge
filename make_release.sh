@@ -1,11 +1,11 @@
-CMD_PATH="../cmd/kaspabridge"
+CMD_PATH="../cmd/slyvexbridge"
 rm -rf release
 mkdir -p release
 cd release
 VERSION=1.2.2
-ARCHIVE="ks_bridge-${VERSION}"
-OUTFILE="ks_bridge"
-OUTDIR="ks_bridge"
+ARCHIVE="svx_bridge-${VERSION}"
+OUTFILE="svx_bridge"
+OUTDIR="svx_bridge"
 
 # windows
 mkdir -p ${OUTDIR};env GOOS=windows GOARCH=amd64 go build -o ${OUTDIR}/${OUTFILE}.exe ${CMD_PATH};cp ${CMD_PATH}/config.yaml ${OUTDIR}/

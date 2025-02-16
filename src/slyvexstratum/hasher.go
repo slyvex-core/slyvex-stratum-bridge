@@ -1,4 +1,4 @@
-package kaspastratum
+package slyvexstratum
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"log"
 	"math/big"
 
-	"github.com/kaspanet/kaspad/app/appmessage"
+	"github.com/slyvex-core/slyvexd/app/appmessage"
 	"golang.org/x/crypto/blake2b"
 )
 
@@ -23,17 +23,17 @@ var (
 // Basically three different ways of representing difficulty, each used on
 // different occasions.  All 3 are updated when the stratum diff is set via 
 // the setDiffValue method
-type kaspaDiff struct {
+type slyvexDiff struct {
 	hashValue   float64  // previously known as shareValue
 	diffValue   float64  // previously known as fixedDifficulty
 	targetValue *big.Int // previously know as fixedDifficultyBI
 }
 
-func newKaspaDiff() *kaspaDiff {
-	return &kaspaDiff{}
+func newSlyvexDiff() *slyvexDiff {
+	return &slyvexDiff{}
 }
 
-func (k *kaspaDiff) setDiffValue(diff float64) {
+func (k *slyvexDiff) setDiffValue(diff float64) {
 	k.diffValue = diff
 	k.targetValue = DiffToTarget(diff)
 	k.hashValue = DiffToHash(diff)

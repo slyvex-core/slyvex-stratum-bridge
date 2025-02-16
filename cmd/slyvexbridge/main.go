@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/onemorebsmith/kaspastratum/src/kaspastratum"
+	"github.com/onemorebsmith/slyvexstratum/src/slyvexstratum"
 	"gopkg.in/yaml.v2"
 )
 
@@ -20,7 +20,7 @@ func main() {
 		log.Printf("config file not found: %s", err)
 		os.Exit(1)
 	}
-	cfg := kaspastratum.BridgeConfig{}
+	cfg := slyvexstratum.BridgeConfig{}
 	if err := yaml.Unmarshal(rawCfg, &cfg); err != nil {
 		log.Printf("failed parsing config file: %s", err)
 		os.Exit(1)
@@ -28,7 +28,7 @@ func main() {
 
 	flag.StringVar(&cfg.StratumPort, "stratum", cfg.StratumPort, "stratum port to listen on, default `:5555`")
 	flag.BoolVar(&cfg.PrintStats, "stats", cfg.PrintStats, "true to show periodic stats to console, default `true`")
-	flag.StringVar(&cfg.RPCServer, "kaspa", cfg.RPCServer, "address of the kaspad node, default `localhost:16110`")
+	flag.StringVar(&cfg.RPCServer, "slyvex", cfg.RPCServer, "address of the slyvexd node, default `localhost:28110`")
 	flag.DurationVar(&cfg.BlockWaitTime, "blockwait", cfg.BlockWaitTime, "time in ms to wait before manually requesting new block, default `3s`")
 	flag.UintVar(&cfg.MinShareDiff, "mindiff", cfg.MinShareDiff, "minimum share difficulty to accept from miner(s), default `4096`")
 	flag.BoolVar(&cfg.ClampPow2, "pow2clamp", cfg.ClampPow2, "true to limit diff to powers of 2, required for IceRiver/Bitmain ASICs, default `true`")
@@ -43,7 +43,7 @@ func main() {
 
 	log.Println("----------------------------------")
 	log.Printf("initializing bridge")
-	log.Printf("\tkaspad:          %s", cfg.RPCServer)
+	log.Printf("\tslyvexd:          %s", cfg.RPCServer)
 	log.Printf("\tstratum:         %s", cfg.StratumPort)
 	log.Printf("\tprom:            %s", cfg.PromPort)
 	log.Printf("\tstats:           %t", cfg.PrintStats)
@@ -58,7 +58,7 @@ func main() {
 	log.Printf("\thealth check:    %s", cfg.HealthCheckPort)
 	log.Println("----------------------------------")
 
-	if err := kaspastratum.ListenAndServe(cfg); err != nil {
+	if err := slyvexstratum.ListenAndServe(cfg); err != nil {
 		log.Println(err)
 	}
 }
